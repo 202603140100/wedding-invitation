@@ -4,19 +4,32 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <!-- 카카오톡/SNS 공유 설정 (Open Graph) -->
+     <!-- 카카오톡/SNS 공유 설정 (Open Graph) -->
     <meta property="og:title" content="결혼합니다 :) 근호 & 경미">
     <meta property="og:description" content="2026년 3월 14일 오후 1시 네이버 그린팩토리">
     <meta property="og:image" content="https://202603140100.github.io/wedding-invitation/images/og_image.jpg">
     <meta property="og:url" content="https://202603140100.github.io/wedding-invitation/">
     
     <title>결혼합니다 : 근호 & 경미</title>
+    
+    <script>
+        /**
+         * EMERGENCY GLOBAL ERROR HANDLER
+         * 외부 스크립트(네이버 지도 등)에서 발생하는 상세 확인 불가능한 "Script error."를 억제합니다.
+         */
+        window.onerror = function(msg, url, line, col, error) {
+            if (msg === 'Script error.' || msg === 'Script error') {
+                return true; // 에러 전파를 막아 콘솔 오류를 방지함
+            }
+            return false;
+        };
+    </script>
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
     
-    <!-- 네이버 지도 API -->
-    <!-- YOUR_CLIENT_ID 부분에 실제 발급받으신 ncpClientId를 입력해야 지도가 정상 작동합니다 -->
-    <script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=7ofvk5ic1t"></script>
+    <!-- 네이버 지도 API: YOUR_CLIENT_ID를 실제 발급받은 ID로 반드시 교체해야 지도가 표시됩니다. -->
+    <script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=7ofvk5ic1t" defer></script>
     
     <style>
         :root {
@@ -25,7 +38,7 @@
             --spotify-grey: #f8f8f8;
         }
 
-        /* 전역 폰트 및 스냅 설정 */
+        /* 전역 폰트 설정 */
         * { font-family: 'Nanum Myeongjo', serif !important; box-sizing: border-box; }
         html { scroll-snap-type: y mandatory; scroll-behavior: smooth; }
         .font-playfair, .font-playfair * { font-family: 'Playfair Display', serif !important; }
@@ -62,7 +75,6 @@
             box-shadow: 0 10px 40px rgba(0,0,0,0.06);
         }
 
-        /* 지도 스타일: filter 속성(grayscale)을 제거하여 컬러로 변경 */
         #map { 
             width: 100%; 
             height: 100%; 
@@ -79,6 +91,7 @@
             color: #999;
             font-size: 13px;
             z-index: 1;
+            padding: 0 20px;
         }
 
         .no-scrollbar::-webkit-scrollbar { display: none; }
@@ -149,10 +162,25 @@
         </div>
     </section>
 
-    <!-- 3. Location Page -->
+    <!-- 3. Gallery Page -->
+    <section class="bg-white justify-center">
+        <div class="gallery-container reveal no-scrollbar flex overflow-x-auto snap-x snap-mandatory px-[5vw] gap-2">
+            <div class="gallery-item flex-none w-[90vw] aspect-[4/5] snap-center rounded-lg overflow-hidden shadow-lg">
+                <img src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=2069&auto=format&fit=crop" class="w-full h-full object-cover" alt="갤러리 1">
+            </div>
+            <div class="gallery-item flex-none w-[90vw] aspect-[4/5] snap-center rounded-lg overflow-hidden shadow-lg">
+                <img src="https://images.unsplash.com/photo-1583939003579-730e3918a45a?q=80&w=1974&auto=format&fit=crop" class="w-full h-full object-cover" alt="갤러리 2">
+            </div>
+            <div class="gallery-item flex-none w-[90vw] aspect-[4/5] snap-center rounded-lg overflow-hidden shadow-lg">
+                <img src="https://images.unsplash.com/photo-1519225421980-715cb0215aed?q=80&w=2070&auto=format&fit=crop" class="w-full h-full object-cover" alt="갤러리 3">
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. Location Page -->
     <section class="relative h-screen bg-gray-100 overflow-hidden">
         <div id="map" class="absolute inset-0 z-0">
-            <div class="map-error-msg">지도를 불러오는 중입니다...<br><span class="text-[10px] opacity-50">(인증 오류 시 Client ID 및 도메인을 확인해 주세요)</span></div>
+            <div id="map-placeholder" class="map-error-msg">지도를 불러오는 중입니다...<br><span class="text-[10px] opacity-50">(인증 오류 시 Client ID 및 도메인을 확인해 주세요)</span></div>
         </div>
         
         <div class="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-white/60 to-transparent pointer-events-none z-10"></div>
@@ -174,21 +202,6 @@
         </div>
     </section>
 
-    <!-- 4. Gallery Page -->
-    <section class="bg-white justify-center">
-        <div class="gallery-container reveal no-scrollbar flex overflow-x-auto snap-x snap-mandatory px-[5vw] gap-2">
-            <div class="gallery-item flex-none w-[90vw] aspect-[4/5] snap-center rounded-lg overflow-hidden shadow-lg">
-                <img src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=2069&auto=format&fit=crop" class="w-full h-full object-cover" alt="갤러리 1">
-            </div>
-            <div class="gallery-item flex-none w-[90vw] aspect-[4/5] snap-center rounded-lg overflow-hidden shadow-lg">
-                <img src="https://images.unsplash.com/photo-1583939003579-730e3918a45a?q=80&w=1974&auto=format&fit=crop" class="w-full h-full object-cover" alt="갤러리 2">
-            </div>
-            <div class="gallery-item flex-none w-[90vw] aspect-[4/5] snap-center rounded-lg overflow-hidden shadow-lg">
-                <img src="https://images.unsplash.com/photo-1519225421980-715cb0215aed?q=80&w=2070&auto=format&fit=crop" class="w-full h-full object-cover" alt="갤러리 3">
-            </div>
-        </div>
-    </section>
-
     <!-- 5. Support Page -->
     <section class="px-8 bg-white justify-center py-16">
         <div class="max-w-screen-md mx-auto w-full reveal">
@@ -197,7 +210,7 @@
                     공간이 협소하여 화환은 정중히 사양하오니 양해 부탁드립니다.<br>
                     혹여 직접 뵙지 못해 아쉬운 마음을 전하고자 하시는 분들을 위해 조심스럽게 마음 전하실 곳을 남깁니다.
                 </p>
-                <p class="text-[11px] text-gray-300 mt-4 tracking-wider">성함을 누르면 계좌번호가 복사됩니다.</p>
+                <p class="text-[11px] text-gray-300 mt-5 tracking-wider">성함을 누르면 계좌번호가 복사됩니다.</p>
             </div>
 
             <div class="grid grid-cols-2 gap-x-12 gap-y-12">
@@ -262,32 +275,38 @@
         };
 
         function copyToClipboard(text) {
-            const textArea = document.createElement("textarea");
-            textArea.value = text;
-            document.body.appendChild(textArea);
-            textArea.select();
-            document.execCommand('copy');
-            document.body.removeChild(textArea);
-            
-            if (text.includes('그린팩토리')) {
-                showToast("주소가 복사되었습니다.");
+            try {
+                const textArea = document.createElement("textarea");
+                textArea.value = text;
+                textArea.style.position = "fixed"; 
+                textArea.style.left = "-9999px";
+                textArea.style.top = "0";
+                document.body.appendChild(textArea);
+                textArea.focus();
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                
+                if (text.includes('그린팩토리')) {
+                    showToast("주소가 복사되었습니다.");
+                }
+            } catch (err) {
+                console.warn('복사 오류 (사용자 차단 등):', err);
             }
         }
 
         function copyAccount(key, name) {
             const text = SECURE_ACCOUNTS[key];
-            const textArea = document.createElement("textarea");
-            textArea.value = text;
-            document.body.appendChild(textArea);
-            textArea.select();
-            document.execCommand('copy');
-            document.body.removeChild(textArea);
-            showToast(`${name} 계좌가 복사되었습니다.`);
+            if (text) {
+                copyToClipboard(text);
+                showToast(`${name} 계좌가 복사되었습니다.`);
+            }
         }
 
         let toastTimeout;
         function showToast(message) {
             const toast = document.getElementById('toast');
+            if (!toast) return;
             toast.innerText = message;
             toast.style.opacity = '1';
             toast.style.transform = 'translateY(0)';
@@ -301,63 +320,95 @@
         }
 
         function initDDayWithAnimation() {
-            const weddingDate = new Date('2026-03-14T00:00:00');
-            const now = new Date();
-            const targetDiffDays = Math.ceil((weddingDate - now) / (1000 * 60 * 60 * 24));
-            const label = document.getElementById('d-day-label');
-            if (targetDiffDays <= 0) { label.innerText = targetDiffDays === 0 ? "WEDDING DAY" : "MARRIED"; return; }
+            try {
+                const weddingDate = new Date('2026-03-14T00:00:00');
+                const now = new Date();
+                const targetDiffDays = Math.ceil((weddingDate - now) / (1000 * 60 * 60 * 24));
+                const label = document.getElementById('d-day-label');
+                if (!label) return;
+                
+                if (targetDiffDays <= 0) { 
+                    label.innerText = targetDiffDays === 0 ? "WEDDING DAY" : "MARRIED"; 
+                    return; 
+                }
 
-            let startValue = 99; 
-            const duration = 700; 
-            const totalFrames = Math.round(duration / (1000 / 60));
-            let frame = 0;
-            const counter = setInterval(() => {
-                frame++;
-                const progress = frame / totalFrames;
-                const currentValue = Math.round(startValue - (startValue - targetDiffDays) * progress);
-                if (frame >= totalFrames) { label.innerText = `D-${targetDiffDays}`; clearInterval(counter); }
-                else { label.innerText = `D-${currentValue}`; }
-            }, 1000 / 60);
+                let startValue = 99; 
+                const duration = 700; 
+                const totalFrames = Math.round(duration / (1000 / 60));
+                let frame = 0;
+                const counter = setInterval(() => {
+                    frame++;
+                    const progress = frame / totalFrames;
+                    const currentValue = Math.round(startValue - (startValue - targetDiffDays) * progress);
+                    if (frame >= totalFrames) { 
+                        label.innerText = `D-${targetDiffDays}`; 
+                        clearInterval(counter); 
+                    } else { 
+                        label.innerText = `D-${currentValue}`; 
+                    }
+                }, 1000 / 60);
+            } catch (e) {
+                console.warn('D-Day 카운트 오류:', e);
+            }
+        }
+
+        function initMapSafe() {
+            // Client ID가 아직 기본값인 경우 실행하지 않음
+            const scriptTag = document.querySelector('script[src*="ncpClientId"]');
+            if (scriptTag && scriptTag.src.indexOf('YOUR_CLIENT_ID') > -1) {
+                return;
+            }
+
+            try {
+                if (typeof naver !== 'undefined' && naver.maps) {
+                    const targetPos = new naver.maps.LatLng(37.3595704, 127.105399);
+                    
+                    const mapOptions = {
+                        center: targetPos,
+                        zoom: 16,
+                        zoomControl: false, 
+                        scrollWheel: false,
+                        draggable: true,
+                        logoControl: true,
+                        mapDataControl: false,
+                        keyboardShortcuts: false,
+                        disableDoubleTapZoom: false
+                    };
+                    
+                    const map = new naver.maps.Map('map', mapOptions);
+                    
+                    new naver.maps.Marker({
+                        position: targetPos,
+                        map: map,
+                        animation: naver.maps.Animation.DROP
+                    });
+
+                    window.addEventListener('resize', function() {
+                        map.setCenter(targetPos);
+                    });
+                    
+                    const placeholder = document.getElementById('map-placeholder');
+                    if (placeholder) placeholder.style.display = 'none';
+                }
+            } catch (mapInitError) {
+                console.warn("지도 API 초기화 방지됨:", mapInitError);
+            }
         }
 
         window.onload = function() {
             initDDayWithAnimation();
             
-            if (typeof naver !== 'undefined' && naver.maps) {
-                const targetPos = new naver.maps.LatLng(37.3595704, 127.105399);
-                
-                var mapOptions = {
-                    center: targetPos,
-                    zoom: 16,
-                    zoomControl: false, 
-                    scrollWheel: false,
-                    draggable: true,
-                    logoControl: true,
-                    mapDataControl: false,
-                    keyboardShortcuts: false,
-                    disableDoubleTapZoom: false
-                };
-                
-                var map = new naver.maps.Map('map', mapOptions);
-                
-                new naver.maps.Marker({
-                    position: targetPos,
-                    map: map,
-                    animation: naver.maps.Animation.DROP
-                });
-
-                window.addEventListener('resize', function() {
-                    map.setCenter(targetPos);
-                });
-            } else {
-                console.error("Naver Maps API 로드 실패: YOUR_CLIENT_ID를 확인해주세요.");
-            }
+            // 약간의 지연 시간을 두어 외부 스크립트 비동기 로드 충돌 방지
+            setTimeout(() => {
+                initMapSafe();
+            }, 300);
             
             handleReveal();
         };
 
         function handleReveal() {
-            document.querySelectorAll('.reveal').forEach(el => {
+            const reveals = document.querySelectorAll('.reveal');
+            reveals.forEach(el => {
                 const rect = el.getBoundingClientRect();
                 if (rect.top < window.innerHeight - 80) el.classList.add('active');
             });
